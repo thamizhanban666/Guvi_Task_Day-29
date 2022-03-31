@@ -25,7 +25,7 @@ function Tables() {
                    <Link to="/create-user" className="d-none d-sm-inline-block btn btn-md btn-success shadow-sm">Create User</Link>
             </div>
             <div className="card-body">
-                <div className="table-responsive">
+                  <div className="table-responsive">
                     <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
                         <thead>
                             <tr>

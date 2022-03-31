@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { useFormik } from 'formik';
 import axios from 'axios';
-function CreateUser() {
+import swal from 'sweetalert'
+function CreateUser() { 
      const formik = useFormik({
           initialValues: {
                name: "",
@@ -35,18 +36,25 @@ function CreateUser() {
                
                return errors;
           },
-          onSubmit: async (values) => {
-               // values.startDate = values.startDate.split("-").reverse().join("-");
-               
+          onSubmit: async (values) => {               
                try {
                     await axios.post("https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin",values)
                } catch (error) {
                     console.log(error);
                }
-
-               alert("Successfully Submited");
-               formik.resetForm();
-               window.location.href="/users"
+               swal("success")
+               swal({
+                    title: `User - ${values.name}`,
+                    text: "Succefully Created",
+                    icon: "success",
+                    button: true,
+               })
+               .then((ok) => {
+                    if (ok) {
+                         formik.resetForm();
+                         window.location.href="/users" 
+                    }     
+               })
           }
      })
   return (

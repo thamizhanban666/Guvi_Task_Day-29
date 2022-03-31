@@ -1,18 +1,39 @@
 import axios from 'axios';
 import { Link } from 'react-router-dom'
 import React, { useEffect } from 'react'
+import swal from 'sweetalert';
 
 function Row_tables(props) {
 
+  // To handle the delete button of the user
   let handleDelete = async (user) => {
-    if (window.confirm(`Are you sure to delete the user ${user.name}?`)) {
-      try {
-        await axios.delete(`https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin/${user.id}`)
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    window.location.reload();
+    // if (window.confirm(`Are you sure to delete the user ${user.name}?`)) {
+    //   try {
+    //     await axios.delete(`https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin/${user.id}`)
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+    swal({
+      title: `Are you sure to delete the user ${user.name}?`,
+      text: "Once deleted, you will not be able to recover this user data",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+      .then(async (willDelete) => {
+        if (willDelete) {
+            try {
+              await axios.delete(`https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin/${user.id}`)
+            } catch (error) {
+              console.log(error);
+            }
+          swal(`User ${user.name} has been deleted!`, {
+            icon: "success",
+          });
+          window.location.reload();
+        }
+      });
   }
   
   return (
