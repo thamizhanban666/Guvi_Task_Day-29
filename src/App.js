@@ -7,14 +7,17 @@ import Tables from './Components/Tables';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CreateUser from './Components/CreateUser';
 import EditUser from './Components/EditUser';
+import {MyProvider} from './Components/userContext'
+import { useState } from 'react';
 
 function App() { 
+  const [users, setUsers] = useState([]);
   return (
   <BrowserRouter>
     <div id="page-top">
       {/* <!-- Page Wrapper --> */}
       <div id="wrapper">
-
+          <MyProvider value={{ users, setUsers }}>
         <SideBar></SideBar>
         
         {/* <!-- Content Wrapper --> */}
@@ -35,7 +38,8 @@ function App() {
                 </div>
                 {/* <!-- /.container-fluid --> */}
           </div>
-        </div>
+            </div>
+            </MyProvider>
         </div>
         {/* <!-- End of Content Wrapper --> */}
        {/* <!-- Footer --> */}

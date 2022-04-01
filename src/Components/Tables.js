@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Row_tables from './Row_tables'
 import axios from 'axios'
+import myContext from './userContext'
 function Tables() {
-    const [users, setUsers] = useState([]);
-  useEffect(async()=>{
-    try {
-        let datas = await axios.get("https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin")
-        setUsers(datas.data)
-    } catch (error) {
-        console.log(error);
-    }
+    // const [users, setUsers] = useState([]);
+    const userContext = useContext(myContext)
+    useEffect(async()=>{
+        try {
+            let datas = await axios.get("https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin")
+            userContext.setUsers(datas.data)
+            
+        } catch (error) {
+            console.log(error);
+        }
   
   },[])
   return (
@@ -21,8 +24,8 @@ function Tables() {
         {/* <!-- DataTales Example --> */}
         <div className="card shadow mb-4">
             <div className="card-header py-3 d-sm-flex align-items-center justify-content-between mb-4">
-                  <h6 className="m-0 font-weight-bold text-primary">List of Users</h6>
-                   <Link to="/create-user" className="d-none d-sm-inline-block btn btn-md btn-success shadow-sm">Create User</Link>
+                <h6 className="m-0 font-weight-bold text-primary">List of Users</h6>
+                <Link to="/create-user" className="d-none d-sm-inline-block btn btn-md btn-success shadow-sm">Create User</Link>
             </div>
             <div className="card-body">
                   <div className="table-responsive">
@@ -51,7 +54,7 @@ function Tables() {
                         </tfoot>
                         <tbody>
                             {
-                                users.map((obj) => {
+                              userContext.users.map((obj) => {
                                     return <Row_tables data={obj}/>
                                 })     
                             }

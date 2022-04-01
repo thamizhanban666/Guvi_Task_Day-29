@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useFormik } from 'formik';
 import axios from 'axios';
 import swal from 'sweetalert'
+import myContext from './userContext';
+import { Link } from 'react-router-dom';
 function CreateUser() { 
+     const userContext = useContext(myContext);
      const formik = useFormik({
           initialValues: {
                name: "",
@@ -38,7 +41,8 @@ function CreateUser() {
           },
           onSubmit: async (values) => {               
                try {
-                    await axios.post("https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin",values)
+                    await axios.post("https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin", values);
+                    userContext.setUser([...userContext.users,values])
                } catch (error) {
                     console.log(error);
                }
@@ -52,7 +56,7 @@ function CreateUser() {
                .then((ok) => {
                     if (ok) {
                          formik.resetForm();
-                         window.location.href="/users" 
+                         <Link to="/users"></Link>
                     }     
                })
           }

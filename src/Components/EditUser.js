@@ -1,10 +1,13 @@
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import myContext from './userContext';
+import swal from 'sweetalert';
 
-function EditUser(props) {
-   let params = useParams();
+function EditUser() {
+     const userContext = useContext(myContext);
+     let params = useParams();
    useEffect(async()=>{
     try {
        let fetch = await axios.get(`https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin/${params.id}`);
@@ -48,17 +51,43 @@ function EditUser(props) {
                
                return errors;
           },
-          onSubmit: async (values) => {
-             if (window.confirm(`Are you sure to edit this user?`)) {
-                try {
-                   await axios.put(`https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin/${params.id}`, values)
-                } catch (error) {
-                   console.log(error);
-                }
-                formik.resetForm();
-               window.location.href="/users"
-             } 
-          }
+          onSubmit: (values) => {
+             //    if (window.confirm(`Are you sure to edit this user?`)) {
+               swal({
+                    title: `Are you sure to edit this user?`,
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+               })
+               .then(async (willEdit) => {
+                    if (willEdit) {
+          
+                         try {
+                              await axios.put(`https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin/${params.id}`, values)
+                              let index = userContext.users.findIndex((obj) => obj.id == params.id);
+                              userContext.users.splice(index, 1, values)
+                              userContext.setUsers([...userContext.users])
+                              formik.resetForm();
+                              swal(`This user has been edited`, {
+                                   icon: "success",
+                              }).then((ok) => {
+                                   if (ok) {
+                                        // window.location.href="/users"  
+                                   }
+                              })
+                         } catch (error) {
+                              console.log(error);
+                              swal(`This user was not edited due to some technical issues`,'Please try after some time', {
+                                   icon: "info",
+                              }).then((ok) => {
+                                   if (ok) {
+                                        // window.location.href="/users"  
+                                   }
+                              })
+                         }                         
+                    }
+               });
+          } 
      })
    
    return (
