@@ -1,4 +1,5 @@
 import './App.css';
+// import 'bootstrap/dist/css/bootstrap.min.css'
 // import 'bootstrap/dist/js/bootstrap.bundle.js'
 import SideBar from './Components/SideBar';
 import TopBar from './Components/TopBar';
@@ -9,6 +10,7 @@ import CreateUser from './Components/CreateUser';
 import EditUser from './Components/EditUser';
 import {MyProvider} from './Components/userContext'
 import { useState } from 'react';
+import ViewUser from './Components/ViewUser';
 
 function App() { 
   const [users, setUsers] = useState([]);
@@ -34,6 +36,7 @@ function App() {
                     <Route path="users" element={<Tables />} />
                     <Route path="create-user" element={<CreateUser />} />
                     <Route path="edit-user/:id" element={<EditUser />} />
+                    <Route path="view-user/:id" element={<ViewUser />} />
                   </Routes>
                 </div>
                 {/* <!-- /.container-fluid --> */}

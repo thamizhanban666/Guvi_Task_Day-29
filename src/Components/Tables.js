@@ -4,17 +4,14 @@ import Row_tables from './Row_tables'
 import axios from 'axios'
 import myContext from './userContext'
 function Tables() {
-    // const [users, setUsers] = useState([]);
     const userContext = useContext(myContext)
     useEffect(async()=>{
         try {
             let datas = await axios.get("https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin")
-            userContext.setUsers(datas.data)
-            
+            userContext.setUsers(datas.data)   
         } catch (error) {
             console.log(error);
         }
-  
   },[])
   return (
    <>
@@ -63,7 +60,6 @@ function Tables() {
                 </div>
             </div>
         </div>
-
     </>
   )
 }

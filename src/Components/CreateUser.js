@@ -3,17 +3,18 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import swal from 'sweetalert'
 import myContext from './userContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 function CreateUser() { 
+     let navigate = useNavigate()
      const userContext = useContext(myContext);
      const formik = useFormik({
           initialValues: {
                name: "",
                position: "",
                office: "",
-               age: 0,
+               age: "",
                startDate: "",
-               salary:0,
+               salary:"",
           },
           validate: (values) => {
                const errors = {};
@@ -42,23 +43,22 @@ function CreateUser() {
           onSubmit: async (values) => {               
                try {
                     await axios.post("https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin", values);
-                    userContext.setUser([...userContext.users,values])
+                    userContext.setUsers([...userContext.users, values]);
+                    formik.resetForm();
+                    navigate("/users")
+                    swal({
+                         title: `User - ${values.name}`,
+                         text: "Succefully Created",
+                         icon: "success",
+                         button: true,
+                    })
                } catch (error) {
                     console.log(error);
+                    navigate("/users");
+                    swal(`This user was not created due to some technical issues`,'Please try after some time', {
+                         icon: "info",
+                    })
                }
-               swal("success")
-               swal({
-                    title: `User - ${values.name}`,
-                    text: "Succefully Created",
-                    icon: "success",
-                    button: true,
-               })
-               .then((ok) => {
-                    if (ok) {
-                         formik.resetForm();
-                         <Link to="/users"></Link>
-                    }     
-               })
           }
      })
   return (
@@ -102,7 +102,8 @@ function CreateUser() {
                <button type='submit' className="d-none d-sm-inline-block btn btn-lg btn-success shadow-sm" disabled={Object.keys(formik.errors).length>0? true:false} >Submit</button>
           </div>
           </form>
-      </fieldset>
+            </fieldset>
+            <button className="d-none d-sm-inline-block btn btn-md btn-primary shadow-sm mt-2" onClick={()=>{navigate("/users")}}>Back</button>
    </div>
   )
 }

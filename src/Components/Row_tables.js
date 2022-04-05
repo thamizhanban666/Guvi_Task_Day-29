@@ -12,7 +12,6 @@ function Row_tables(props) {
         title: `Are you sure to delete the user ${user.name}?`,
         text: "Once deleted, you will not be able to recover this user data",
         icon: "error",
-        // buttons: true,
         buttons:{
           cancel: {
             text: "Cancel",
@@ -27,7 +26,6 @@ function Row_tables(props) {
             visible: true,
             className: "btn btn-danger",
             closeModal: true
-            
           }
         },
         dangerMode: true,
@@ -42,21 +40,13 @@ function Row_tables(props) {
               swal(`User ${user.name} has been deleted!`, {
                 icon: "success",
                 buttons:{ confirm:{className:"btn btn-primary"}}
-              }).then((ok) => {
-              if (ok) {
-                // window.location.reload();  
-              }
-            })
+              })
             } catch (error) {
               console.log(error);
               swal(`User ${user.name} has not been deleted due to some technical issues`,'Please try after some time', {
                 icon: "info",
                 buttons:{ confirm:{className:"btn btn-primary"}}
-              }).then((ok) => {
-                if (ok) {
-                  // window.location.reload();  
-                }
-              });
+              })
             }
           }
         });
@@ -71,14 +61,13 @@ function Row_tables(props) {
         <td>{props.data.startDate.split("-").reverse().join("-")}</td>
         <td>{props.data.salary}</td>
         <td>
-          <button className='btn-sm btn-outline-primary m-1 border border-3 border-primary rounded-pill shadow-sm'>View</button>
+          <Link to={`/view-user/${props.data.id}`} className='btn-sm btn-outline-primary m-1 border border-3 border-primary rounded-pill shadow-sm'>View</Link>
+          {/* <button className='btn-sm btn-outline-primary m-1 border border-3 border-primary rounded-pill shadow-sm' data-bs-toggle="modal" data-bs-target="#view" >View</button> */}
           <Link to={`/edit-user/${props.data.id}`} className='btn-sm btn-outline-warning m-1 border border-3 border-warning rounded-pill text-dark shadow-sm'>Edit</Link>
           <button className='btn-sm btn-outline-danger m-1 border border-3 border-danger rounded-pill shadow-sm' onClick={()=>handleDelete(props.data)}>Delete</button>
-        </td>
-      
+        </td>      
       </tr>
     )
-
 }
 
 export default Row_tables

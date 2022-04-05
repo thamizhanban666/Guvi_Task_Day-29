@@ -1,11 +1,12 @@
 import { useFormik } from 'formik';
 import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import myContext from './userContext';
 import swal from 'sweetalert';
 
 function EditUser() {
+     let navigate = useNavigate()
      const userContext = useContext(myContext);
      let params = useParams();
    useEffect(async()=>{
@@ -23,9 +24,9 @@ function EditUser() {
                name: "",
                position: "",
                office: "",
-               age: 0,
+               age: "",
                startDate: "",
-               salary:0,
+               salary:"",
           },
           validate: (values) => {
                const errors = {};
@@ -61,28 +62,21 @@ function EditUser() {
                })
                .then(async (willEdit) => {
                     if (willEdit) {
-          
                          try {
                               await axios.put(`https://6212758cf43692c9c6eb7113.mockapi.io/day29-sb-admin/${params.id}`, values)
                               let index = userContext.users.findIndex((obj) => obj.id == params.id);
                               userContext.users.splice(index, 1, values)
                               userContext.setUsers([...userContext.users])
                               formik.resetForm();
+                              navigate("/users")
                               swal(`This user has been edited`, {
                                    icon: "success",
-                              }).then((ok) => {
-                                   if (ok) {
-                                        // window.location.href="/users"  
-                                   }
                               })
                          } catch (error) {
                               console.log(error);
+                              navigate("/users")  
                               swal(`This user was not edited due to some technical issues`,'Please try after some time', {
                                    icon: "info",
-                              }).then((ok) => {
-                                   if (ok) {
-                                        // window.location.href="/users"  
-                                   }
                               })
                          }                         
                     }
@@ -131,7 +125,9 @@ function EditUser() {
                <button type='submit' className="d-none d-sm-inline-block btn btn-lg btn-success shadow-sm" disabled={Object.keys(formik.errors).length>0? true:false} >Submit</button>
           </div>
           </form>
-      </fieldset>
+             </fieldset>
+             <button className="d-none d-sm-inline-block btn btn-md btn-primary shadow-sm mt-2" onClick={()=>{navigate("/users")}}>Back</button>        
+       
    </div>
   )
 }
